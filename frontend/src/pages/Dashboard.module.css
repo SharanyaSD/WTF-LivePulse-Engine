@@ -1,0 +1,90 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skeletonRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.pageTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #E2E8F0;
+  letter-spacing: -0.3px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 20px;
+  align-items: start;
+  min-height: 520px;
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.kpiRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.anomalyCount {
+  background: #1A1A2E;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #1E2040;
+  display: flex;
+  flex-direction: column;
+}
+
+.acTitle {
+  font-size: 12px;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.acValue {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+  transition: color 0.3s ease;
+  font-variant-numeric: tabular-nums;
+}
+
+.acSub {
+  font-size: 13px;
+  color: #64748B;
+  margin-top: 8px;
+}
+
+.rightCol {
+  height: 520px;
+  display: flex;
+  flex-direction: column;
+}

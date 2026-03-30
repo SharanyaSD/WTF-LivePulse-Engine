@@ -1,0 +1,138 @@
+.nav {
+  background: #12122A;
+  border-bottom: 1px solid #1E2040;
+  padding: 0 24px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #00D4AA;
+  letter-spacing: -0.5px;
+  margin-right: 32px;
+  white-space: nowrap;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stat {
+  font-size: 13px;
+  color: #64748B;
+}
+
+.statValue {
+  color: #E2E8F0;
+  font-weight: 600;
+}
+
+.divider {
+  color: #2D3748;
+  user-select: none;
+}
+
+.center {
+  display: flex;
+  gap: 4px;
+}
+
+.navBtn {
+  background: transparent;
+  border: none;
+  color: #64748B;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: color 0.15s, background 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.navBtn:hover {
+  color: #E2E8F0;
+  background: #1A1A2E;
+}
+
+.navBtn.active {
+  color: #00D4AA;
+  background: rgba(0, 212, 170, 0.1);
+}
+
+.badge {
+  background: #EF4444;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  line-height: 1.4;
+  min-width: 18px;
+  text-align: center;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.liveIndicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.connected {
+  background: #22C55E;
+  animation: pulse 2s infinite;
+}
+
+.disconnected {
+  background: #EF4444;
+}
+
+.liveLabel {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.connectedLabel {
+  color: #22C55E;
+}
+
+.disconnectedLabel {
+  color: #EF4444;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  }
+}

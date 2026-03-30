@@ -1,0 +1,71 @@
+.card {
+  background: #1A1A2E;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #1E2040;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.title {
+  font-size: 12px;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+.liveDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22C55E;
+  animation: blink 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.value {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+  transition: color 0.3s ease;
+  font-variant-numeric: tabular-nums;
+}
+
+.sub {
+  font-size: 13px;
+  color: #64748B;
+  margin-top: 4px;
+  margin-bottom: 16px;
+}
+
+.barBg {
+  background: #0D0D1A;
+  border-radius: 4px;
+  height: 6px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease, background 0.3s ease;
+  min-width: 2px;
+}
+
+.pct {
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}

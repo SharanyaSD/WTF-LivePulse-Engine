@@ -1,0 +1,37 @@
+.card {
+  background: #1A1A2E;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #1E2040;
+}
+
+.title {
+  font-size: 12px;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.value {
+  font-size: 42px;
+  font-weight: 700;
+  color: #00D4AA;
+  line-height: 1;
+  transition: color 0.3s ease;
+  font-variant-numeric: tabular-nums;
+}
+
+.currency {
+  font-size: 24px;
+  vertical-align: super;
+  margin-right: 2px;
+  opacity: 0.8;
+}
+
+.sub {
+  font-size: 13px;
+  color: #64748B;
+  margin-top: 8px;
+}

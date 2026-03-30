@@ -2,17 +2,22 @@ import { useEffect, useState } from 'react'
 import { useStore } from '../store'
 
 export function useGymData() {
-  const { selectedGymId, setGyms, setGymLiveData } = useStore()
+  const { selectedGymId, setGyms, setGymLiveData, setAnomalies } = useStore()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    fetch('/api/gyms')
-      .then((r) => {
+    Promise.all([
+      fetch('/api/gyms').then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`)
         return r.json()
-      })
-      .then((gyms) => {
+      }),
+      fetch('/api/anomalies').then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        return r.json()
+      }),
+    ])
+      .then(([gyms, anomalies]) => {
         setGyms(gyms)
         gyms.forEach((g) =>
           setGymLiveData(g.id, {
@@ -20,6 +25,7 @@ export function useGymData() {
             today_revenue: g.today_revenue,
           })
         )
+        setAnomalies(anomalies)
         setLoading(false)
       })
       .catch((e) => {

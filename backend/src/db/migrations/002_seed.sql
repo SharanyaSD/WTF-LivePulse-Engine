@@ -757,6 +757,53 @@ BEGIN
     SELECT id FROM members WHERE gym_id = g_saltlake AND status = 'active' ORDER BY id LIMIT 1
   ) m;
 
+  -- -------------------------------------------------------------------------
+  -- 6d. PRE-SEEDED OPEN CHECK-INS for remaining gyms (spec Section 4.4)
+  --     Gives each gym realistic live occupancy at startup.
+  --     Velachery stays at 0 (anomaly scenario above).
+  --     Bandra already has 280 open (anomaly scenario above).
+  -- -------------------------------------------------------------------------
+
+  -- Powai (large, cap 250): 30 open check-ins
+  INSERT INTO checkins (member_id, gym_id, checked_in, checked_out)
+  SELECT m.id, g_powai, NOW() - INTERVAL '25 minutes', NULL
+  FROM (SELECT id FROM members WHERE gym_id = g_powai AND status = 'active' ORDER BY id LIMIT 30) m;
+
+  -- Lajpat Nagar (medium, cap 220): 20 open check-ins
+  INSERT INTO checkins (member_id, gym_id, checked_in, checked_out)
+  SELECT m.id, g_lajpat, NOW() - INTERVAL '20 minutes', NULL
+  FROM (SELECT id FROM members WHERE gym_id = g_lajpat AND status = 'active' ORDER BY id LIMIT 20) m;
+
+  -- Connaught Place (medium, cap 180): 18 open check-ins
+  INSERT INTO checkins (member_id, gym_id, checked_in, checked_out)
+  SELECT m.id, g_cp, NOW() - INTERVAL '22 minutes', NULL
+  FROM (SELECT id FROM members WHERE gym_id = g_cp AND status = 'active' ORDER BY id LIMIT 18) m;
+
+  -- Indiranagar (medium, cap 200): 20 open check-ins
+  INSERT INTO checkins (member_id, gym_id, checked_in, checked_out)
+  SELECT m.id, g_indiranagar, NOW() - INTERVAL '18 minutes', NULL
+  FROM (SELECT id FROM members WHERE gym_id = g_indiranagar AND status = 'active' ORDER BY id LIMIT 20) m;
+
+  -- Koramangala (medium, cap 180): 17 open check-ins
+  INSERT INTO checkins (member_id, gym_id, checked_in, checked_out)
+  SELECT m.id, g_koramangala, NOW() - INTERVAL '30 minutes', NULL
+  FROM (SELECT id FROM members WHERE gym_id = g_koramangala AND status = 'active' ORDER BY id LIMIT 17) m;
+
+  -- Banjara Hills (medium, cap 160): 15 open check-ins
+  INSERT INTO checkins (member_id, gym_id, checked_in, checked_out)
+  SELECT m.id, g_banjara, NOW() - INTERVAL '15 minutes', NULL
+  FROM (SELECT id FROM members WHERE gym_id = g_banjara AND status = 'active' ORDER BY id LIMIT 15) m;
+
+  -- Sector 18 Noida (small, cap 140): 12 open check-ins
+  INSERT INTO checkins (member_id, gym_id, checked_in, checked_out)
+  SELECT m.id, g_noida, NOW() - INTERVAL '20 minutes', NULL
+  FROM (SELECT id FROM members WHERE gym_id = g_noida AND status = 'active' ORDER BY id LIMIT 12) m;
+
+  -- Salt Lake (small, cap 120): 10 open check-ins
+  INSERT INTO checkins (member_id, gym_id, checked_in, checked_out)
+  SELECT m.id, g_saltlake, NOW() - INTERVAL '25 minutes', NULL
+  FROM (SELECT id FROM members WHERE gym_id = g_saltlake AND status = 'active' ORDER BY id LIMIT 10) m;
+
   RAISE NOTICE '[6/8] Anomaly scenarios done.';
 
   -- =========================================================================

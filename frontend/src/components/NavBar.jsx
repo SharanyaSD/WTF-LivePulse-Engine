@@ -2,7 +2,7 @@ import { useStore } from '../store'
 import styles from './NavBar.module.css'
 
 export default function NavBar({ activePage, onNavigate }) {
-  const { wsConnected, unreadAnomalyCount, clearAnomalyCount, gyms, liveData } =
+  const { wsConnected, unreadAnomalyCount, clearAnomalyCount, gyms, liveData, anomalies } =
     useStore()
 
   const totalOccupancy = gyms.reduce(
@@ -14,6 +14,7 @@ export default function NavBar({ activePage, onNavigate }) {
       sum + parseFloat(liveData[g.id]?.today_revenue ?? g.today_revenue ?? 0),
     0
   )
+  const activeAnomalyCount = anomalies.filter((a) => !a.resolved).length
 
   const pages = ['dashboard', 'analytics', 'anomalies']
 
@@ -31,6 +32,13 @@ export default function NavBar({ activePage, onNavigate }) {
               ₹{totalRevenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
             </span>{' '}
             today
+          </span>
+          <span className={styles.divider}>|</span>
+          <span className={styles.stat}>
+            <span className={styles.statValue} style={{ color: activeAnomalyCount > 0 ? '#EF4444' : '#22C55E' }}>
+              {activeAnomalyCount}
+            </span>{' '}
+            alerts
           </span>
         </div>
       </div>

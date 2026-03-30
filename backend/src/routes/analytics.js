@@ -59,21 +59,26 @@ router.get('/gyms/:id/analytics', async (req, res, next) => {
         [gymId, interval]
       ),
 
-      // Churn risk: members with no checkin in the last 14 days whose
-      // membership expires within the next 30 days
+      // Churn risk: active members with no check-in for 45+ days
+      // High = 45–60 days inactive, Critical = 60+ days inactive
       pool.query(
         `SELECT
             m.id,
             m.name,
             m.email,
-            m.plan_expires_at,
-            m.last_checkin_at
+            m.last_checkin_at,
+            CASE
+              WHEN m.last_checkin_at IS NULL OR m.last_checkin_at < NOW() - INTERVAL '60 days'
+                THEN 'CRITICAL'
+              ELSE 'HIGH'
+            END AS risk_level,
+            EXTRACT(DAY FROM NOW() - COALESCE(m.last_checkin_at, NOW() - INTERVAL '90 days'))::int AS days_inactive
            FROM members m
           WHERE m.gym_id = $1
             AND m.status = 'active'
-            AND (m.last_checkin_at IS NULL OR m.last_checkin_at < NOW() - INTERVAL '14 days')
-            AND m.plan_expires_at BETWEEN NOW() AND NOW() + INTERVAL '30 days'
-          ORDER BY m.plan_expires_at`,
+            AND (m.last_checkin_at IS NULL OR m.last_checkin_at < NOW() - INTERVAL '45 days')
+          ORDER BY m.last_checkin_at ASC NULLS FIRST
+          LIMIT 50`,
         [gymId]
       ),
 
@@ -111,8 +116,8 @@ router.get('/gyms/:id/analytics', async (req, res, next) => {
       })),
       churn_risk_members: churnRisk.rows,
       new_renewal_ratio: {
-        new: newCount,
-        renewal: renewalCount,
+        new_count: newCount,
+        renewal_count: renewalCount,
         new_pct: new_renewal_ratio,
       },
     });
@@ -146,19 +151,18 @@ router.get('/analytics/cross-gym', async (req, res, next) => {
       ORDER BY total_revenue DESC
     `);
 
-    res.json({
-      date_range: '30d',
-      gyms: rows.map((r) => ({
+    res.json(
+      rows.map((r) => ({
         id: r.id,
-        name: r.name,
+        gym_name: r.name,
         city: r.city,
         capacity: r.capacity,
         total_revenue: Number(r.total_revenue),
         paying_members: Number(r.paying_members),
         total_checkins: Number(r.total_checkins),
         revenue_rank: Number(r.revenue_rank),
-      })),
-    });
+      }))
+    );
   } catch (err) {
     next(err);
   }

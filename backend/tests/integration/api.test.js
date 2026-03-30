@@ -207,12 +207,11 @@ skipIfNoDb('API Integration Tests', () => {
   test('12. GET /api/analytics/cross-gym returns 200 with array of gyms with total_revenue', async () => {
     const res = await request(app).get('/api/analytics/cross-gym');
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('gyms');
-    expect(Array.isArray(res.body.gyms)).toBe(true);
+    expect(Array.isArray(res.body)).toBe(true);
 
-    const firstGym = res.body.gyms[0];
+    const firstGym = res.body[0];
     expect(firstGym).toHaveProperty('id');
-    expect(firstGym).toHaveProperty('name');
+    expect(firstGym).toHaveProperty('gym_name');
     expect(firstGym).toHaveProperty('total_revenue');
     expect(typeof firstGym.total_revenue).toBe('number');
   });

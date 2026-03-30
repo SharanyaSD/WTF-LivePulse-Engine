@@ -211,35 +211,38 @@ export default function Analytics() {
         {/* New vs Renewal Donut */}
         <div className={styles.card}>
           <div className={styles.cardTitle}>New vs Renewal (Last 30d)</div>
-          <ResponsiveContainer width="100%" height={220}>
-            <PieChart>
-              <Pie
-                data={donutData}
-                cx="50%"
-                cy="50%"
-                innerRadius={55}
-                outerRadius={85}
-                dataKey="value"
-                label={({ name, percent }) =>
-                  percent > 0 ? `${name} ${(percent * 100).toFixed(0)}%` : ''
-                }
-                labelLine={false}
-              >
-                {DONUT_COLORS.map((c, i) => (
-                  <Cell key={i} fill={c} />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={CustomTooltipStyle}
-                formatter={(v, name) => [v, name]}
-              />
-              <Legend
-                formatter={(value) => (
-                  <span style={{ color: '#E2E8F0', fontSize: 12 }}>{value}</span>
-                )}
-              />
-            </PieChart>
-          </ResponsiveContainer>
+          <div style={{ padding: '12px 0 8px' }}>
+            <ResponsiveContainer width="100%" height={260}>
+              <PieChart>
+                <Pie
+                  data={donutData}
+                  cx="50%"
+                  cy="45%"
+                  innerRadius={55}
+                  outerRadius={85}
+                  dataKey="value"
+                  label={({ name, percent }) =>
+                    percent > 0 ? `${name} ${(percent * 100).toFixed(0)}%` : ''
+                  }
+                  labelLine={false}
+                >
+                  {DONUT_COLORS.map((c, i) => (
+                    <Cell key={i} fill={c} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={CustomTooltipStyle}
+                  formatter={(v, name) => [v, name]}
+                />
+                <Legend
+                  wrapperStyle={{ paddingTop: '20px' }}
+                  formatter={(value) => (
+                    <span style={{ color: '#E2E8F0', fontSize: 12 }}>{value}</span>
+                  )}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
         {/* Churn Risk */}
@@ -283,6 +286,7 @@ export default function Analytics() {
         {/* Cross-Gym Revenue Comparison */}
         <div className={`${styles.card} ${styles.crossGymCard}`}>
           <div className={styles.cardTitle}>Cross-Gym Revenue (Last 30d)</div>
+          <div style={{ padding: '12px 0 4px' }}>
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={crossGym} layout="vertical">
               <XAxis
@@ -308,6 +312,7 @@ export default function Analytics() {
               <Bar dataKey="total_revenue" fill="#00D4AA" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </div>

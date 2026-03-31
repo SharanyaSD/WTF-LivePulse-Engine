@@ -5,6 +5,7 @@ const {
   detectZeroCheckins,
   detectCapacityBreach,
   detectRevenueDrop,
+  detectMemberSearch,
   resolveAnomaly,
 } = require('../services/anomalyService');
 const { broadcast } = require('../websocket');
@@ -32,14 +33,15 @@ async function _runDetection() {
     if (gyms.length === 0) return;
 
     // Run all detectors concurrently
-    const [zeroCheckinAnomalies, capacityAnomalies, revenueAnomalies] =
+    const [zeroCheckinAnomalies, capacityAnomalies, revenueAnomalies, memberSearchAnomalies] =
       await Promise.all([
         detectZeroCheckins(gyms),
         detectCapacityBreach(gyms),
         detectRevenueDrop(gyms),
+        detectMemberSearch(gyms),
       ]);
 
-    const allNew = [...zeroCheckinAnomalies, ...capacityAnomalies, ...revenueAnomalies];
+    const allNew = [...zeroCheckinAnomalies, ...capacityAnomalies, ...revenueAnomalies, ...memberSearchAnomalies ];
 
     for (const anomaly of allNew) {
       broadcast({
@@ -139,6 +141,29 @@ async function _autoResolveStaleAnomalies(gyms) {
             AND paid_at >= CURRENT_DATE - INTERVAL '7 days'`,
         [gym.id]
       );
+
+    // member search 
+    const { rows: memberRows } = await pool.query(`
+      SELECT member_id, COUNT(*) AS checkin_count
+      FROM checkins
+      WHERE checked_in >= NOW() - INTERVAL '30 minutes'
+      GROUP BY member_id
+      HAVING COUNT(*) >= 50
+    `);
+
+    const { rows: openMember } = await pool.query(
+      `SELECT id FROM anomalies
+        WHERE type = 'member_search' AND resolved = false`
+    );
+    for (const a of openMember) {
+      if (memberRows.length === 0) {
+        const resolved = await resolveAnomaly(a.id);
+        if (resolved) {
+          broadcast({ type: 'ANOMALY_RESOLVED', timestamp: new Date().toISOString(), anomaly: resolved });
+        }
+      }
+    }
+
       const todayRev    = Number(revRows[0].today_rev);
       const lastWeekRev = Number(revRows[0].last_week_rev);
 

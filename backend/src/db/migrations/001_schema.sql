@@ -97,7 +97,7 @@ CREATE TABLE anomalies (
   id           UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
   gym_id       UUID        NOT NULL REFERENCES gyms(id) ON DELETE CASCADE,
   type         TEXT        NOT NULL
-                           CHECK (type IN ('zero_checkins', 'capacity_breach', 'revenue_drop')),
+                           CHECK (type IN ('zero_checkins', 'capacity_breach', 'revenue_drop', 'member_search')),
   severity     TEXT        NOT NULL CHECK (severity IN ('warning', 'critical')),
   message      TEXT        NOT NULL,
   resolved     BOOLEAN     NOT NULL DEFAULT FALSE,

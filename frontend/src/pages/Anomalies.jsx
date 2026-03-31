@@ -6,12 +6,14 @@ const TYPE_LABELS = {
   zero_checkins: 'Zero Check-ins',
   capacity_breach: 'Capacity Breach',
   revenue_drop: 'Revenue Drop',
+  member_search: 'Member Search',
 }
 
 const TYPE_ICONS = {
   zero_checkins: '🚫',
   capacity_breach: '🔴',
   revenue_drop: '📉',
+  member_search: '🔍' ,
 }
 
 export default function Anomalies() {

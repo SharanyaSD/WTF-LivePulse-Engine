@@ -167,6 +167,34 @@ async function detectRevenueDrop(gyms) {
   return created;
 }
 
+async function detectMemberSearch(gyms) {
+    const created = [];
+
+    try {
+      const {rows} = await pool.query(
+        `SELECT member_id, COUNT(*) AS checkin_count
+        FROM checkins
+        WHERE checked_in >= NOW() - INTERVAL '30 minutes'
+        GROUP BY member_id
+        HAVING COUNT(*) >= 50`
+      );
+      for(const row of rows) {
+        const message = `Member ${row.member_id} has checked in ${row.checkin_count} times in the last 30 minutes.`;
+        const anomaly = await upsertAnomaly(null, 'member_search', 'critical', message);
+        if (anomaly && anomaly.detected_at) {
+          const age = Date.now() - new Date(anomaly.detected_at).getTime();
+          if (age < 5000) {
+            created.push(anomaly);
+          }
+        
+      }
+    }
+  } catch(err) {
+    console.error('error detecting member search anomaly:', err.message);
+  }
+  return created;
+}
+
 // ---------------------------------------------------------------------------
 // resolveAnomaly
 // Marks a specific anomaly as resolved.
@@ -267,9 +295,11 @@ module.exports = {
   detectZeroCheckins,
   detectCapacityBreach,
   detectRevenueDrop,
+  detectMemberSearch,
   resolveAnomaly,
   autoResolveCheckins,
   autoResolveCapacity,
   autoResolveRevenue,
-  upsertAnomaly,
+  upsertAnomaly
+  
 };
